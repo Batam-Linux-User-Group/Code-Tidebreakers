@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Linux — Sistem Operasi Bebas untuk Semua</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;800&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+:root{--bg:#E8EEF4;--ink:#12233A;--mute:#4A5B72;--card:#F7F9FB;--line:#C5D0DD;--blue:#2F6FDE;--sun:#F5B82E;--term:#0F1B2D;--termfg:#D6E4F5;
+--sans:"Bricolage Grotesque",system-ui,-apple-system,"Segoe UI",sans-serif;--mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0B1524;--ink:#E4ECF6;--mute:#9FB1C7;--card:#13233A;--line:#27405E;--blue:#6FA3FF;--term:#060D18}}
+:root[data-theme="dark"]{--bg:#0B1524;--ink:#E4ECF6;--mute:#9FB1C7;--card:#13233A;--line:#27405E;--blue:#6FA3FF;--term:#060D18}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.6;font-size:17px}
+.wrap{max-width:880px;margin:0 auto;padding:0 20px}
+header.hero{padding:48px 0 32px}
+h1{font-size:clamp(44px,12vw,92px);line-height:.95;margin:0 0 18px;font-weight:800;letter-spacing:-.03em}
+h1 span{display:inline-block;background:var(--sun);color:#12233A;padding:0 .12em;border-radius:.12em;transform:rotate(-1.5deg)}
+.lead{font-size:20px;max-width:34em;color:var(--mute);margin:0 0 28px}
+.term{background:var(--term);color:var(--termfg);border-radius:14px;font-family:var(--mono);font-size:14px;overflow:hidden;border:1px solid var(--line)}
+.term .bar{padding:8px 14px;background:rgba(255,255,255,.06);font-size:12px;color:#8FA6C2}
+#out{padding:14px;height:230px;overflow-y:auto;white-space:pre-wrap;word-break:break-word}
+#out b{color:var(--sun);font-weight:600}
+.in{display:flex;gap:8px;padding:10px 14px;border-top:1px solid rgba(255,255,255,.1)}
+.in label{color:var(--sun);white-space:nowrap}
+.in input{flex:1;min-width:0;background:none;border:0;color:inherit;font:inherit;outline:0}
+.hint{margin:10px 0 0;font-size:14px;color:var(--mute)}
+.hint button{font:inherit;font-family:var(--mono);font-size:13px;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:2px 8px;margin:2px;cursor:pointer}
+section{padding:36px 0;border-top:1px solid var(--line)}
+h2{font-size:clamp(28px,6vw,40px);line-height:1.1;margin:0 0 14px;letter-spacing:-.02em}
+p{margin:0 0 14px;max-width:38em}
+.tl{list-style:none;margin:0;padding:0 0 0 18px;border-left:3px solid var(--blue)}
+.tl li{margin:0 0 16px;position:relative}
+.tl li::before{content:"";position:absolute;left:-26px;top:9px;width:11px;height:11px;border-radius:50%;background:var(--sun);border:2px solid var(--blue)}
+.tl strong{font-family:var(--mono);font-weight:600}
+.tabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+.tabs button{font:inherit;font-size:15px;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:99px;padding:6px 16px;cursor:pointer}
+.tabs button[aria-selected="true"]{background:var(--blue);color:#fff;border-color:var(--blue)}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 20px}
+.panel h3{margin:0 0 6px;font-size:22px}
+.panel p{margin:0 0 8px}
+.panel small{color:var(--mute)}
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%;min-width:420px;font-size:15px}
+th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+td:first-child{font-family:var(--mono);color:var(--blue);white-space:nowrap}
+.why{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.why div{border-left:3px solid var(--sun);padding-left:14px}
+.why h3{margin:0 0 4px;font-size:19px}
+.why p{margin:0;font-size:16px;color:var(--mute)}
+footer{padding:28px 0 40px;color:var(--mute);font-size:14px;border-top:1px solid var(--line)}
+:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+@media (prefers-reduced-motion:no-preference){.cursor{animation:b 1s steps(2) infinite}}
+@keyframes b{50%{opacity:0}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="hero">
+<h1>Linux<br>itu <span>bebas.</span></h1>
+<p class="lead">Sistem operasi gratis dan open source yang menjalankan sebagian besar server internet, semua ponsel Android, dan superkomputer tercepat di dunia. Coba dulu terminalnya di bawah.</p>
+<div class="term" role="group" aria-label="Terminal simulasi">
+<div class="bar">terminal — bash (simulasi)</div>
+<div id="out" aria-live="polite"></div>
+<form class="in" id="f" onsubmit="return false"><label for="c">tamu@linux:~$</label><input id="c" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Ketik perintah"></form>
+</div>
+<p class="hint">Coba: <button data-c="help">help</button><button data-c="neofetch">neofetch</button><button data-c="ls">ls</button><button data-c="uname -a">uname -a</button><button data-c="whoami">whoami</button></p>
+</header>
+
+<section>
+<h2>Apa itu Linux?</h2>
+<p>Linux sebenarnya adalah <em>kernel</em>, yaitu inti yang mengatur perangkat keras seperti prosesor, memori, dan disk. Kernel ini digabung dengan perangkat lunak lain (GNU, desktop, aplikasi) menjadi paket lengkap yang disebut <strong>distribusi</strong> atau distro.</p>
+<p>Kodenya terbuka: siapa pun boleh membaca, mengubah, dan membagikannya. Itu sebabnya ada ratusan distro dengan tujuan berbeda-beda.</p>
+</section>
+
+<section>
+<h2>Perjalanan singkat</h2>
+<ul class="tl">
+<li><strong>1991</strong> Linus Torvalds, mahasiswa Finlandia, mengumumkan kernel buatannya sebagai proyek hobi.</li>
+<li><strong>1992</strong> Linux dirilis dengan lisensi GNU GPL, sehingga bebas dipakai dan dikembangkan bersama.</li>
+<li><strong>1993</strong> Debian dan Slackware lahir, distro tertua yang masih dipakai sampai sekarang.</li>
+<li><strong>2004</strong> Ubuntu hadir dan membuat Linux ramah bagi pengguna desktop biasa.</li>
+<li><strong>2008</strong> Android, yang berbasis kernel Linux, dirilis dan menyebar ke miliaran ponsel.</li>
+</ul>
+</section>
+
+<section>
+<h2>Pilih distro</h2>
+<p>Tidak ada distro terbaik, hanya yang paling cocok. Ketuk untuk melihat.</p>
+<div class="tabs" role="tablist" id="tabs"></div>
+<div class="panel" id="panel" role="tabpanel" aria-live="polite"></div>
+</section>
+
+<section>
+<h2>Perintah dasar</h2>
+<div class="scroll"><table>
+<tr><th>Perintah</th><th>Fungsi</th></tr>
+<tr><td>pwd</td><td>Menampilkan folder tempat kamu berada</td></tr>
+<tr><td>ls</td><td>Melihat isi folder</td></tr>
+<tr><td>cd folder</td><td>Pindah ke folder lain</td></tr>
+<tr><td>mkdir nama</td><td>Membuat folder baru</td></tr>
+<tr><td>cp a b</td><td>Menyalin berkas a menjadi b</td></tr>
+<tr><td>mv a b</td><td>Memindahkan atau mengganti nama berkas</td></tr>
+<tr><td>rm berkas</td><td>Menghapus berkas (tidak masuk tempat sampah)</td></tr>
+<tr><td>man perintah</td><td>Membuka panduan lengkap sebuah perintah</td></tr>
+<tr><td>sudo</td><td>Menjalankan perintah dengan hak admin</td></tr>
+</table></div>
+</section>
+
+<section>
+<h2>Kenapa orang memakai Linux</h2>
+<div class="why">
+<div><h3>Gratis</h3><p>Tanpa biaya lisensi, dan boleh dipasang di berapa pun komputer.</p></div>
+<div><h3>Ringan</h3><p>Banyak distro berjalan lancar di laptop lama yang sudah berat memakai sistem lain.</p></div>
+<div><h3>Aman</h3><p>Pengelolaan izin yang ketat dan pembaruan cepat dari komunitas.</p></div>
+<div><h3>Bisa diubah</h3><p>Tampilan, perilaku, sampai kernelnya bisa disesuaikan sesuai selera.</p></div>
+</div>
+</section>
+
+<footer>Halaman pengantar Linux. Tux, si pinguin maskot Linux, dibuat oleh Larry Ewing pada 1996.</footer>
+</div>
+
+<script>
+(function(){
+var out=document.getElementById('out'),inp=document.getElementById('c'),hist=[],hi=0;
+var cmds={
+help:"Perintah tersedia:\n  help, ls, pwd, whoami, date, echo, uname -a, neofetch, cat tentang.txt, clear",
+ls:"tentang.txt  dokumen/  unduhan/  musik/  proyek/",
+pwd:"/home/tamu",
+whoami:"tamu",
+"uname -a":"Linux linux-id 6.8.0 #1 SMP x86_64 GNU/Linux",
+neofetch:"       .--.       tamu@linux-id\n      |o_o |      ------------\n      |:_/ |      OS: Linux (distro pilihanmu)\n     //   \\ \\     Kernel: 6.8.0\n    (|     | )    Shell: bash\n   /'\\_   _/`\\     Lisensi: GPL, bebas\n   \\___)=(___/",
+"cat tentang.txt":"Linux dibuat oleh Linus Torvalds pada 1991.\nKodenya terbuka dan dikembangkan ribuan orang di seluruh dunia."
+};
+function p(t){out.textContent+=t+"\n";out.scrollTop=out.scrollHeight}
+function run(v){
+v=v.trim();p("tamu@linux:~$ "+v);if(!v)return;
+if(v==="clear"){out.textContent="";return}
+if(v==="date"){p(new Date().toString());return}
+if(v.indexOf("echo ")===0){p(v.slice(5));return}
+if(v.indexOf("sudo")===0){p("Nice try. Akun tamu tidak punya hak admin.");return}
+if(v.indexOf("rm")===0){p("rm: operasi ditolak. Ini hanya simulasi, aman.");return}
+p(cmds[v]||("bash: "+v.split(" ")[0]+": perintah tidak ditemukan. Ketik help."));
+}
+p("Selamat datang! Ketik help lalu tekan Enter.");
+inp.addEventListener('keydown',function(e){
+if(e.key==="Enter"){hist.push(inp.value);hi=hist.length;run(inp.value);inp.value=""}
+else if(e.key==="ArrowUp"&&hi>0){hi--;inp.value=hist[hi];e.preventDefault()}
+else if(e.key==="ArrowDown"&&hi<hist.length){hi++;inp.value=hist[hi]||"";e.preventDefault()}
+});
+document.querySelectorAll('.hint button').forEach(function(b){b.onclick=function(){run(b.dataset.c)}});
+
+var D=[
+["Ubuntu","Pemula","Paling populer untuk desktop. Pembaruan teratur, komunitas besar, dan banyak tutorial berbahasa Indonesia.","Cocok untuk: pengguna baru, kantor, belajar."],
+["Linux Mint","Pindahan dari Windows","Tampilannya akrab dengan menu di kiri bawah. Langsung siap pakai, termasuk codec media.","Cocok untuk: laptop lama dan pengguna yang ingin mudah."],
+["Fedora","Terbaru","Memakai teknologi terbaru lebih dulu, dengan dukungan kuat dari Red Hat.","Cocok untuk: pengembang yang ingin software mutakhir."],
+["Debian","Stabil","Dikenal sangat stabil dan menjadi dasar banyak distro lain, termasuk Ubuntu.","Cocok untuk: server dan sistem yang tak boleh sering rusak."],
+["Arch Linux","Mahir","Dipasang dari nol dan disusun sendiri. Dokumentasinya (ArchWiki) sangat lengkap.","Cocok untuk: yang ingin paham isi sistem dan kontrol penuh."]
+],T=document.getElementById('tabs'),P=document.getElementById('panel');
+function show(i){
+[].forEach.call(T.children,function(b,j){b.setAttribute('aria-selected',j===i)});
+var d=D[i];P.innerHTML="<h3>"+d[0]+" <small>("+d[1]+")</small></h3><p>"+d[2]+"</p><p><small>"+d[3]+"</small></p>";
+}
+D.forEach(function(d,i){var b=document.createElement('button');b.role="tab";b.textContent=d[0];b.onclick=function(){show(i)};T.appendChild(b)});
+show(0);
+})();
+</script>
+</body>
+</html>
