@@ -1,0 +1,2641 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="auto">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Linux — Sistem Operasi Bebas untuk Semua</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap">
+
+<style>
+/* ==========================================================================
+   DESIGN TOKENS & THEMING
+   Palet: Biru (#2F6FDE), Kuning (#F5B82E), Navy Gelap (#0F1B2D / #0B1524)
+   Font: Bricolage Grotesque + JetBrains Mono
+   ========================================================================== */
+:root {
+  --bg: #E8EEF4;
+  --bg-subtle: #DEE7F0;
+  --ink: #12233A;
+  --ink-secondary: #2C425F;
+  --mute: #4A5B72;
+  --card: #F7F9FB;
+  --card-hover: #FFFFFF;
+  --card-border: #C5D0DD;
+  --line: #C5D0DD;
+  --blue: #2F6FDE;
+  --blue-hover: #1E56B6;
+  --blue-soft: rgba(47, 111, 222, 0.12);
+  --blue-glow: rgba(47, 111, 222, 0.28);
+  --sun: #F5B82E;
+  --sun-hover: #E0A31E;
+  --sun-soft: rgba(245, 184, 46, 0.18);
+  --sun-glow: rgba(245, 184, 46, 0.32);
+  --term: #0F1B2D;
+  --term-bar: #0B1422;
+  --termfg: #D6E4F5;
+  --term-muted: #7E97B8;
+  --term-green: #34D399;
+  --term-yellow: #FCD34D;
+  --term-red: #F87171;
+  --term-blue: #60A5FA;
+  --shadow-sm: 0 2px 8px rgba(18, 35, 58, 0.06);
+  --shadow-md: 0 8px 24px rgba(18, 35, 58, 0.08);
+  --shadow-lg: 0 16px 40px rgba(18, 35, 58, 0.14);
+  --shadow-glow: 0 0 28px rgba(47, 111, 222, 0.2);
+  --sans: "Bricolage Grotesque", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-full: 9999px;
+  --transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  box-sizing: border-box;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0B1524;
+    --bg-subtle: #08101C;
+    --ink: #E4ECF6;
+    --ink-secondary: #B6C8DE;
+    --mute: #9FB1C7;
+    --card: #13233A;
+    --card-hover: #172B47;
+    --card-border: #27405E;
+    --line: #27405E;
+    --blue: #6FA3FF;
+    --blue-hover: #8AB4FF;
+    --blue-soft: rgba(111, 163, 255, 0.14);
+    --blue-glow: rgba(111, 163, 255, 0.25);
+    --sun: #F5B82E;
+    --sun-hover: #FFC54D;
+    --sun-soft: rgba(245, 184, 46, 0.15);
+    --sun-glow: rgba(245, 184, 46, 0.25);
+    --term: #060D18;
+    --term-bar: #040910;
+    --termfg: #E1ECF9;
+    --term-muted: #647B98;
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.45);
+    --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.6);
+    --shadow-glow: 0 0 32px rgba(111, 163, 255, 0.18);
+  }
+}
+
+:root[data-theme="dark"] {
+  --bg: #0B1524;
+  --bg-subtle: #08101C;
+  --ink: #E4ECF6;
+  --ink-secondary: #B6C8DE;
+  --mute: #9FB1C7;
+  --card: #13233A;
+  --card-hover: #172B47;
+  --card-border: #27405E;
+  --line: #27405E;
+  --blue: #6FA3FF;
+  --blue-hover: #8AB4FF;
+  --blue-soft: rgba(111, 163, 255, 0.14);
+  --blue-glow: rgba(111, 163, 255, 0.25);
+  --sun: #F5B82E;
+  --sun-hover: #FFC54D;
+  --sun-soft: rgba(245, 184, 46, 0.15);
+  --sun-glow: rgba(245, 184, 46, 0.25);
+  --term: #060D18;
+  --term-bar: #040910;
+  --termfg: #E1ECF9;
+  --term-muted: #647B98;
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.45);
+  --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.6);
+  --shadow-glow: 0 0 32px rgba(111, 163, 255, 0.18);
+}
+
+:root[data-theme="light"] {
+  --bg: #E8EEF4;
+  --bg-subtle: #DEE7F0;
+  --ink: #12233A;
+  --ink-secondary: #2C425F;
+  --mute: #4A5B72;
+  --card: #F7F9FB;
+  --card-hover: #FFFFFF;
+  --card-border: #C5D0DD;
+  --line: #C5D0DD;
+  --blue: #2F6FDE;
+  --blue-hover: #1E56B6;
+  --blue-soft: rgba(47, 111, 222, 0.12);
+  --blue-glow: rgba(47, 111, 222, 0.28);
+  --sun: #F5B82E;
+  --sun-hover: #E0A31E;
+  --sun-soft: rgba(245, 184, 46, 0.18);
+  --sun-glow: rgba(245, 184, 46, 0.32);
+  --term: #0F1B2D;
+  --term-bar: #0B1422;
+  --termfg: #D6E4F5;
+  --term-muted: #7E97B8;
+  --shadow-sm: 0 2px 8px rgba(18, 35, 58, 0.06);
+  --shadow-md: 0 8px 24px rgba(18, 35, 58, 0.08);
+  --shadow-lg: 0 16px 40px rgba(18, 35, 58, 0.14);
+  --shadow-glow: 0 0 28px rgba(47, 111, 222, 0.2);
+}
+
+/* ==========================================================================
+   BASE & RESET
+   ========================================================================== */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 84px;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--sans);
+  line-height: 1.65;
+  font-size: 17px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.25s ease, color 0.25s ease;
+  position: relative;
+  min-height: 100vh;
+}
+
+/* Background subtle ambient mesh */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 480px;
+  background: radial-gradient(circle at 50% -80px, var(--blue-soft) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.wrap {
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 0 24px;
+  position: relative;
+  z-index: 1;
+}
+
+:focus-visible {
+  outline: 3px solid var(--blue);
+  outline-offset: 3px;
+}
+
+/* ==========================================================================
+   NAVIGATION BAR & QUICK HEADER
+   ========================================================================== */
+.site-nav {
+  position: sticky;
+  top: 14px;
+  z-index: 40;
+  margin-bottom: 24px;
+  padding: 10px 18px;
+  background: rgba(247, 249, 251, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+}
+
+:root[data-theme="dark"] .site-nav,
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .site-nav {
+    background: rgba(19, 35, 58, 0.85);
+  }
+}
+
+.nav-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: var(--ink);
+  font-weight: 700;
+  font-size: 16px;
+  letter-spacing: -0.01em;
+}
+
+.nav-brand svg {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+.nav-badge {
+  font-family: var(--mono);
+  font-size: 11px;
+  background: var(--sun);
+  color: #12233A;
+  padding: 2px 7px;
+  border-radius: var(--radius-full);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.nav-links {
+  display: none;
+  gap: 16px;
+}
+
+@media (min-width: 680px) {
+  .nav-links {
+    display: flex;
+    align-items: center;
+  }
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: var(--mute);
+  font-size: 14px;
+  font-weight: 600;
+  transition: var(--transition);
+}
+
+.nav-links a:hover {
+  color: var(--blue);
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.theme-toggle {
+  background: var(--card);
+  border: 1px solid var(--line);
+  color: var(--ink);
+  border-radius: var(--radius-full);
+  width: 38px;
+  height: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: var(--transition);
+  padding: 0;
+}
+
+.theme-toggle:hover {
+  border-color: var(--blue);
+  color: var(--blue);
+  transform: scale(1.05);
+}
+
+.theme-toggle svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* ==========================================================================
+   HERO SECTION
+   ========================================================================== */
+header.hero {
+  padding: 32px 0 36px;
+}
+
+.hero-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--blue-soft);
+  color: var(--blue);
+  border: 1px solid rgba(47, 111, 222, 0.2);
+  border-radius: var(--radius-full);
+  padding: 6px 14px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  margin-bottom: 20px;
+}
+
+.hero-pill .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--sun);
+  box-shadow: 0 0 10px var(--sun);
+}
+
+h1 {
+  font-size: clamp(48px, 11vw, 96px);
+  line-height: 0.94;
+  margin: 0 0 22px;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  color: var(--ink);
+}
+
+h1 span {
+  display: inline-block;
+  background: var(--sun);
+  color: #12233A;
+  padding: 0 0.16em;
+  border-radius: 0.14em;
+  transform: rotate(-1.5deg);
+  box-shadow: 0 6px 20px var(--sun-glow);
+  transition: transform 0.25s ease;
+}
+
+h1 span:hover {
+  transform: rotate(0deg) scale(1.03);
+}
+
+.lead {
+  font-size: clamp(18px, 3.2vw, 21px);
+  max-width: 35em;
+  color: var(--mute);
+  margin: 0 0 32px;
+  line-height: 1.55;
+  font-weight: 400;
+}
+
+/* ==========================================================================
+   TERMINAL (SIMULASI BASH)
+   ========================================================================== */
+.term-container {
+  margin-bottom: 16px;
+}
+
+.term {
+  background: var(--term);
+  color: var(--termfg);
+  border-radius: var(--radius-md);
+  font-family: var(--mono);
+  font-size: 14px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-lg), var(--shadow-glow);
+  transition: var(--transition);
+}
+
+.term .bar {
+  padding: 10px 16px;
+  background: var(--term-bar);
+  font-size: 12px;
+  color: var(--term-muted);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  user-select: none;
+}
+
+.term-controls {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.term-dot {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  display: inline-block;
+}
+.term-dot.red { background: #FF5F56; }
+.term-dot.yellow { background: #FFBD2E; }
+.term-dot.green { background: #27C93F; }
+
+.term-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+  color: #A3BEDC;
+}
+
+.term-actions-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.term-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #B5CCE8;
+  font-family: var(--mono);
+  font-size: 11px;
+  padding: 3px 9px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.term-btn:hover {
+  background: rgba(255, 255, 255, 0.16);
+  color: #FFFFFF;
+}
+
+#out {
+  padding: 16px 18px;
+  height: 250px;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
+  line-height: 1.6;
+}
+
+#out::-webkit-scrollbar {
+  width: 6px;
+}
+#out::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 3px;
+}
+
+#out b {
+  color: var(--sun);
+  font-weight: 600;
+}
+
+.term-prompt-line {
+  color: var(--term-muted);
+}
+.term-prompt-user {
+  color: var(--term-green);
+  font-weight: 600;
+}
+.term-prompt-at {
+  color: #7E97B8;
+}
+.term-prompt-path {
+  color: var(--term-blue);
+  font-weight: 600;
+}
+.term-cmd {
+  color: #FFFFFF;
+}
+
+.in {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(0, 0, 0, 0.15);
+}
+
+.in label {
+  color: var(--term-green);
+  font-weight: 600;
+  white-space: nowrap;
+  font-size: 13.5px;
+}
+
+.in input {
+  flex: 1;
+  min-width: 0;
+  background: none;
+  border: 0;
+  color: #FFFFFF;
+  font: inherit;
+  font-size: 14px;
+  outline: 0;
+}
+
+.hint {
+  margin: 12px 0 0;
+  font-size: 14px;
+  color: var(--mute);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+.hint span {
+  font-weight: 600;
+}
+
+.hint button {
+  font: inherit;
+  font-family: var(--mono);
+  font-size: 12.5px;
+  background: var(--card);
+  color: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  padding: 4px 10px;
+  cursor: pointer;
+  transition: var(--transition);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.hint button:hover {
+  border-color: var(--blue);
+  color: var(--blue);
+  background: var(--card-hover);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+/* ==========================================================================
+   SECTIONS GENERAL
+   ========================================================================== */
+section {
+  padding: 44px 0;
+  border-top: 1px solid var(--line);
+}
+
+h2 {
+  font-size: clamp(30px, 6vw, 42px);
+  line-height: 1.12;
+  margin: 0 0 16px;
+  letter-spacing: -0.03em;
+  font-weight: 800;
+  color: var(--ink);
+}
+
+p {
+  margin: 0 0 16px;
+  max-width: 42em;
+  color: var(--ink-secondary);
+}
+
+p strong {
+  color: var(--ink);
+}
+
+/* ==========================================================================
+   INTERACTIVE ARCHITECTURE VISUALIZER (APA ITU LINUX)
+   ========================================================================== */
+.arch-diagram {
+  margin: 26px 0 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 620px;
+}
+
+.arch-layer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 18px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: var(--transition);
+  position: relative;
+  overflow: hidden;
+}
+
+.arch-layer::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 5px;
+  background: var(--line);
+  transition: var(--transition);
+}
+
+.arch-layer:hover, .arch-layer.active {
+  border-color: var(--blue);
+  background: var(--card-hover);
+  transform: translateX(4px);
+  box-shadow: var(--shadow-sm);
+}
+
+.arch-layer:hover::before, .arch-layer.active::before {
+  background: var(--blue);
+}
+
+.arch-layer.kernel-layer::before {
+  background: var(--sun);
+}
+
+.arch-layer.kernel-layer:hover::before, .arch-layer.kernel-layer.active::before {
+  background: var(--sun);
+}
+
+.arch-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.arch-title {
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--ink);
+}
+
+.arch-desc {
+  font-size: 13px;
+  color: var(--mute);
+}
+
+.arch-tag {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  padding: 3px 8px;
+  border-radius: var(--radius-full);
+  background: var(--bg);
+  color: var(--mute);
+  border: 1px solid var(--line);
+}
+
+/* ==========================================================================
+   TIMELINE (PERJALANAN SINGKAT)
+   ========================================================================== */
+.tl {
+  list-style: none;
+  margin: 24px 0 0;
+  padding: 0 0 0 24px;
+  border-left: 3px solid var(--blue);
+  position: relative;
+}
+
+.tl li {
+  margin: 0 0 24px;
+  position: relative;
+  padding-left: 6px;
+  transition: var(--transition);
+}
+
+.tl li::before {
+  content: "";
+  position: absolute;
+  left: -33px;
+  top: 6px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--sun);
+  border: 3px solid var(--bg);
+  box-shadow: 0 0 0 2px var(--blue);
+  transition: var(--transition);
+}
+
+.tl li:hover::before {
+  transform: scale(1.3);
+  background: var(--sun-hover);
+  box-shadow: 0 0 12px var(--sun);
+}
+
+.tl strong {
+  font-family: var(--mono);
+  font-weight: 700;
+  color: var(--blue);
+  font-size: 16px;
+  display: inline-block;
+  margin-right: 6px;
+  background: var(--blue-soft);
+  padding: 1px 8px;
+  border-radius: 6px;
+}
+
+/* ==========================================================================
+   DISTRO SELECTOR (PILIH DISTRO)
+   ========================================================================== */
+.distro-finder-box {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  padding: 16px 20px;
+  margin-bottom: 20px;
+}
+
+.distro-finder-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.distro-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.distro-chip-btn {
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 600;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  color: var(--mute);
+  padding: 5px 12px;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.distro-chip-btn:hover {
+  border-color: var(--blue);
+  color: var(--blue);
+  background: var(--card-hover);
+}
+
+.distro-chip-btn.active {
+  background: var(--blue);
+  color: #FFFFFF;
+  border-color: var(--blue);
+}
+
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.tabs button {
+  font: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  background: var(--card);
+  color: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-full);
+  padding: 8px 18px;
+  cursor: pointer;
+  transition: var(--transition);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tabs button:hover {
+  border-color: var(--blue);
+  color: var(--blue);
+  transform: translateY(-1px);
+}
+
+.tabs button[aria-selected="true"] {
+  background: var(--blue);
+  color: #FFFFFF;
+  border-color: var(--blue);
+  box-shadow: 0 4px 14px var(--blue-glow);
+}
+
+.tabs button svg {
+  width: 17px;
+  height: 17px;
+  fill: currentColor;
+}
+
+.panel {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  padding: 24px 26px;
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+  position: relative;
+  overflow: hidden;
+}
+
+.panel::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--blue), var(--sun));
+}
+
+.panel h3 {
+  margin: 0 0 10px;
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.panel h3 small {
+  font-size: 14px;
+  font-weight: 600;
+  background: var(--sun);
+  color: #12233A;
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+}
+
+.panel p {
+  margin: 0 0 12px;
+  font-size: 16.5px;
+  line-height: 1.6;
+}
+
+.panel small.recommendation {
+  display: inline-block;
+  color: var(--mute);
+  font-size: 14px;
+  font-weight: 500;
+  background: var(--bg);
+  padding: 6px 14px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--line);
+  margin-top: 4px;
+}
+
+/* ==========================================================================
+   COMMANDS TABLE (PERINTAH DASAR)
+   ========================================================================== */
+.table-header-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 16px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.search-box {
+  position: relative;
+  flex: 1;
+  min-width: 260px;
+}
+
+.search-box input {
+  width: 100%;
+  padding: 10px 14px 10px 38px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  color: var(--ink);
+  font: inherit;
+  font-size: 14px;
+  outline: none;
+  transition: var(--transition);
+}
+
+.search-box input:focus {
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px var(--blue-soft);
+}
+
+.search-box svg {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  color: var(--mute);
+  pointer-events: none;
+}
+
+.scroll {
+  overflow-x: auto;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  min-width: 540px;
+  font-size: 15px;
+}
+
+th {
+  text-align: left;
+  padding: 12px 16px;
+  background: var(--bg);
+  color: var(--ink);
+  font-weight: 700;
+  border-bottom: 2px solid var(--line);
+  font-size: 13.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+td {
+  text-align: left;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--line);
+  vertical-align: middle;
+}
+
+tr:last-child td {
+  border-bottom: none;
+}
+
+tr:hover td {
+  background: var(--card-hover);
+}
+
+td:first-child {
+  font-family: var(--mono);
+  color: var(--blue);
+  white-space: nowrap;
+  font-weight: 600;
+  font-size: 14.5px;
+}
+
+.cmd-badge {
+  background: var(--blue-soft);
+  color: var(--blue);
+  padding: 3px 8px;
+  border-radius: 6px;
+  border: 1px solid rgba(47, 111, 222, 0.2);
+}
+
+.action-btns {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.row-btn {
+  background: var(--bg);
+  border: 1px solid var(--line);
+  color: var(--mute);
+  border-radius: 6px;
+  padding: 4px 8px;
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.row-btn:hover {
+  border-color: var(--blue);
+  color: var(--blue);
+  background: var(--card-hover);
+}
+
+/* ==========================================================================
+   CARDS (KENAPA ORANG MEMAKAI LINUX)
+   ========================================================================== */
+.why {
+  display: grid;
+  gap: 18px;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  margin-top: 18px;
+}
+
+.why-card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--sun);
+  border-radius: var(--radius-md);
+  padding: 20px 22px;
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+  position: relative;
+}
+
+.why-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--blue);
+  border-left-color: var(--blue);
+}
+
+.why-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: var(--radius-sm);
+  background: var(--sun-soft);
+  color: var(--sun);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 14px;
+  transition: var(--transition);
+}
+
+.why-card:hover .why-icon {
+  background: var(--blue-soft);
+  color: var(--blue);
+}
+
+.why-icon svg {
+  width: 22px;
+  height: 22px;
+}
+
+.why h3 {
+  margin: 0 0 6px;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.why p {
+  margin: 0;
+  font-size: 15.5px;
+  color: var(--mute);
+  line-height: 1.55;
+}
+
+/* ==========================================================================
+   FOOTER
+   ========================================================================== */
+footer {
+  padding: 36px 0 60px;
+  color: var(--mute);
+  font-size: 14.5px;
+  border-top: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.footer-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.footer-tux-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  font-size: 13px;
+}
+
+/* ==========================================================================
+   AI ASSISTANT WIDGET ("TUX AI BOT")
+   ========================================================================== */
+.ai-trigger-fab {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 50;
+  background: var(--blue);
+  color: #FFFFFF;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-full);
+  padding: 10px 20px;
+  box-shadow: var(--shadow-lg), 0 0 20px var(--blue-glow);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: 15px;
+  transition: var(--transition);
+}
+
+.ai-trigger-fab:hover {
+  transform: translateY(-3px) scale(1.03);
+  background: var(--blue-hover);
+  box-shadow: var(--shadow-lg), 0 0 30px var(--blue-glow);
+}
+
+.ai-trigger-fab svg.fab-icon {
+  width: 24px;
+  height: 24px;
+  animation: pulse-subtle 3s infinite;
+}
+
+.ai-badge-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--sun);
+  border: 2px solid var(--blue);
+}
+
+/* Floating AI Chat Window */
+.ai-chat-window {
+  position: fixed;
+  bottom: 86px;
+  right: 24px;
+  width: min(400px, calc(100vw - 36px));
+  height: 520px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  flex-direction: column;
+  z-index: 55;
+  overflow: hidden;
+  transform: translateY(20px) scale(0.96);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.22s ease, transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ai-chat-window.open {
+  transform: translateY(0) scale(1);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.ai-header {
+  padding: 14px 18px;
+  background: var(--term);
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.ai-header-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.ai-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--sun);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  box-shadow: 0 0 8px var(--sun-glow);
+}
+
+.ai-avatar svg {
+  width: 24px;
+  height: 24px;
+}
+
+.ai-header-text h4 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.ai-header-text span.status-pill {
+  font-size: 11px;
+  font-family: var(--mono);
+  color: var(--term-green);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.ai-header-text span.status-pill::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--term-green);
+}
+
+.ai-header-actions button {
+  background: none;
+  border: none;
+  color: #94A3B8;
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 6px;
+  display: inline-flex;
+  transition: var(--transition);
+}
+
+.ai-header-actions button:hover {
+  color: #FFFFFF;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.ai-header-actions button svg {
+  width: 18px;
+  height: 18px;
+}
+
+.ai-messages {
+  flex: 1;
+  padding: 16px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  font-size: 14px;
+  background: var(--bg);
+}
+
+.ai-msg {
+  display: flex;
+  gap: 8px;
+  max-width: 86%;
+}
+
+.ai-msg.bot {
+  align-self: flex-start;
+}
+
+.ai-msg.user {
+  align-self: flex-end;
+  flex-direction: row-reverse;
+}
+
+.ai-bubble {
+  padding: 10px 14px;
+  border-radius: 14px;
+  line-height: 1.5;
+  box-shadow: var(--shadow-sm);
+  word-break: break-word;
+}
+
+.ai-msg.bot .ai-bubble {
+  background: var(--card);
+  color: var(--ink);
+  border: 1px solid var(--line);
+  border-bottom-left-radius: 4px;
+}
+
+.ai-msg.user .ai-bubble {
+  background: var(--blue);
+  color: #FFFFFF;
+  border-bottom-right-radius: 4px;
+}
+
+.ai-bubble code {
+  font-family: var(--mono);
+  font-size: 12.5px;
+  background: rgba(47, 111, 222, 0.12);
+  color: var(--blue);
+  padding: 2px 5px;
+  border-radius: 4px;
+}
+
+.ai-msg.user .ai-bubble code {
+  background: rgba(255, 255, 255, 0.2);
+  color: #FFFFFF;
+}
+
+.ai-bubble b, .ai-bubble strong {
+  font-weight: 700;
+  color: inherit;
+}
+
+/* Suggested chips inside chat */
+.ai-quick-chips {
+  padding: 8px 14px;
+  background: var(--card);
+  border-top: 1px solid var(--line);
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+.ai-quick-chips::-webkit-scrollbar {
+  height: 4px;
+}
+.ai-quick-chips::-webkit-scrollbar-thumb {
+  background: var(--line);
+  border-radius: 2px;
+}
+
+.chip-btn {
+  font-family: var(--sans);
+  font-size: 12px;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  color: var(--mute);
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition: var(--transition);
+  flex-shrink: 0;
+}
+
+.chip-btn:hover {
+  border-color: var(--blue);
+  color: var(--blue);
+  background: var(--card-hover);
+}
+
+.ai-input-bar {
+  padding: 10px 14px;
+  background: var(--card);
+  border-top: 1px solid var(--line);
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.ai-input-bar input {
+  flex: 1;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-full);
+  padding: 8px 14px;
+  background: var(--bg);
+  color: var(--ink);
+  font: inherit;
+  font-size: 13.5px;
+  outline: none;
+  transition: var(--transition);
+}
+
+.ai-input-bar input:focus {
+  border-color: var(--blue);
+  box-shadow: 0 0 0 2px var(--blue-soft);
+}
+
+.ai-send-btn {
+  background: var(--blue);
+  color: #FFFFFF;
+  border: none;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: var(--transition);
+  flex-shrink: 0;
+}
+
+.ai-send-btn:hover {
+  background: var(--blue-hover);
+  transform: scale(1.05);
+}
+
+.ai-send-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* Typing dot indicator */
+.typing-indicator {
+  display: inline-flex;
+  gap: 4px;
+  padding: 4px 6px;
+}
+.typing-indicator span {
+  width: 6px;
+  height: 6px;
+  background: var(--mute);
+  border-radius: 50%;
+  animation: typing-dots 1.3s infinite ease-in-out;
+}
+.typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+.typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes typing-dots {
+  0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
+  40% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes pulse-subtle {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+}
+
+/* Toast Notification for Clipboard Copy */
+.toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background: var(--term);
+  color: #FFFFFF;
+  border: 1px solid var(--line);
+  padding: 10px 18px;
+  border-radius: var(--radius-full);
+  font-size: 14px;
+  font-weight: 600;
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  z-index: 100;
+  opacity: 0;
+  transition: all 0.26s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+}
+.toast.show {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}
+
+/* ==========================================================================
+   REDUCED MOTION SUPPORT
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+
+/* ==========================================================================
+   EFEK INTRO: DAUN BERJATUHAN (FALLING LEAVES INTRO ~3 DETIK)
+   ========================================================================== */
+#leafIntroOverlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 99999;
+  overflow: hidden;
+}
+
+.intro-leaf {
+  position: absolute;
+  top: -70px;
+  pointer-events: none;
+  will-change: transform, opacity, top;
+  animation-name: leafFallTrack;
+  animation-timing-function: cubic-bezier(0.33, 1, 0.68, 1);
+  animation-fill-mode: forwards;
+}
+
+.intro-leaf-inner {
+  width: 100%;
+  height: 100%;
+  will-change: transform;
+  animation-name: leafSwayTumble;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.3));
+}
+
+@keyframes leafFallTrack {
+  0% {
+    top: -70px;
+    opacity: 0;
+  }
+  12% {
+    opacity: var(--leaf-op, 0.95);
+  }
+  75% {
+    opacity: var(--leaf-op, 0.95);
+  }
+  100% {
+    top: calc(100vh + 80px);
+    opacity: 0;
+  }
+}
+
+@keyframes leafSwayTumble {
+  0% {
+    transform: translateX(0px) rotateZ(var(--rz, 0deg)) rotateX(0deg) rotateY(0deg);
+  }
+  25% {
+    transform: translateX(calc(var(--sway, 28px) + var(--wind, 18px))) rotateZ(calc(var(--rz, 0deg) + 32deg)) rotateX(45deg) rotateY(25deg);
+  }
+  50% {
+    transform: translateX(calc(var(--wind, 18px) * 2.2)) rotateZ(calc(var(--rz, 0deg) + 70deg)) rotateX(-35deg) rotateY(55deg);
+  }
+  75% {
+    transform: translateX(calc(-1 * var(--sway, 28px) * 0.7 + var(--wind, 18px) * 3.4)) rotateZ(calc(var(--rz, 0deg) + 110deg)) rotateX(40deg) rotateY(-30deg);
+  }
+  100% {
+    transform: translateX(calc(var(--wind, 18px) * 4.6)) rotateZ(calc(var(--rz, 0deg) + 155deg)) rotateX(0deg) rotateY(0deg);
+  }
+}
+
+</style>
+</head>
+<body>
+
+<!-- Skip Link for Accessibility -->
+<a href="#main-content" style="position:absolute;top:-999px;left:10px;background:var(--blue);color:#fff;padding:8px 12px;border-radius:6px;z-index:9999;" onfocus="this.style.top='10px'" onblur="this.style.top='-999px'">Lewati ke konten utama</a>
+
+<div class="wrap" id="main-content">
+
+  <!-- Top Navigation & Theme Switcher -->
+  <nav class="site-nav" aria-label="Navigasi Utama">
+    <a href="#" class="nav-brand">
+      <!-- Tux Icon SVG -->
+      <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M16 2C11.5817 2 8 5.58172 8 10V18C8 22.4183 11.5817 26 16 26C20.4183 26 24 22.4183 24 18V10C24 5.58172 20.4183 2 16 2Z" fill="#12233A"/>
+        <path d="M16 12C13.2386 12 11 14.6863 11 18C11 21.3137 13.2386 24 16 24C18.7614 24 21 21.3137 21 18C21 14.6863 18.7614 12 16 12Z" fill="#FFFFFF"/>
+        <ellipse cx="14" cy="8.5" rx="1.5" ry="2" fill="#FFFFFF"/>
+        <ellipse cx="18" cy="8.5" rx="1.5" ry="2" fill="#FFFFFF"/>
+        <circle cx="14.3" cy="8.5" r="0.9" fill="#12233A"/>
+        <circle cx="17.7" cy="8.5" r="0.9" fill="#12233A"/>
+        <path d="M14 11.5C14 11.5 15.2 13.5 16 13.5C16.8 13.5 18 11.5 18 11.5H14Z" fill="#F5B82E"/>
+        <ellipse cx="10" cy="27" rx="3.5" ry="1.5" fill="#F5B82E"/>
+        <ellipse cx="22" cy="27" rx="3.5" ry="1.5" fill="#F5B82E"/>
+      </svg>
+      <span>Linux.id</span>
+      <span class="nav-badge">Bebas & Terbuka</span>
+    </a>
+
+    <div class="nav-links">
+      <a href="#apa-itu">Apa itu Linux?</a>
+      <a href="#perjalanan">Sejarah</a>
+      <a href="#pilih-distro">Distro</a>
+      <a href="#perintah">Perintah</a>
+      <a href="#keunggulan">Keunggulan</a>
+    </div>
+
+    <div class="nav-actions">
+      <!-- Dark/Light Theme Toggle -->
+      <button class="theme-toggle" id="themeToggle" aria-label="Ganti mode tampilan terang atau gelap" title="Ganti mode tema">
+        <!-- Sun icon -->
+        <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="5"></circle>
+          <line x1="12" y1="1" x2="12" y2="3"></line>
+          <line x1="12" y1="21" x2="12" y2="23"></line>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+          <line x1="1" y1="12" x2="3" y2="12"></line>
+          <line x1="21" y1="12" x2="23" y2="12"></line>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        </svg>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Hero Header -->
+  <header class="hero">
+    <div class="hero-pill">
+      <span class="dot"></span>
+      <span>Sistem Operasi Open Source & Bebas Lisensi</span>
+    </div>
+
+    <h1>Linux<br>itu <span>bebas.</span></h1>
+    <p class="lead">Sistem operasi gratis dan open source yang menjalankan sebagian besar server internet, semua ponsel Android, dan superkomputer tercepat di dunia. Coba dulu terminalnya di bawah.</p>
+    
+    <!-- Terminal Simulation -->
+    <div class="term-container">
+      <div class="term" role="group" aria-label="Terminal simulasi">
+        <div class="bar">
+          <div class="term-controls">
+            <span class="term-dot red" title="Tutup"></span>
+            <span class="term-dot yellow" title="Perkecil"></span>
+            <span class="term-dot green" title="Perbesar"></span>
+          </div>
+          <div class="term-title">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="4 17 10 11 4 5"></polyline><line x1="12" y1="19" x2="20" y2="19"></line></svg>
+            <span>terminal — bash (simulasi)</span>
+          </div>
+          <div class="term-actions-bar">
+            <button class="term-btn" id="clearTermBtn" title="Bersihkan layar">clear</button>
+            <button class="term-btn" id="copyTermBtn" title="Salin output terminal">salin</button>
+          </div>
+        </div>
+
+        <div id="out" aria-live="polite"></div>
+
+        <form class="in" id="f" onsubmit="return false">
+          <label for="c">tamu@linux:~$</label>
+          <input id="c" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Ketik perintah (tekan Tab untuk bantuan)..." aria-label="Ketik perintah">
+        </form>
+      </div>
+    </div>
+
+    <p class="hint">
+      <span>Coba:</span>
+      <button data-c="help">help</button>
+      <button data-c="neofetch">neofetch</button>
+      <button data-c="ls">ls</button>
+      <button data-c="uname -a">uname -a</button>
+      <button data-c="whoami">whoami</button>
+      <button data-c="cat tentang.txt">cat tentang.txt</button>
+      <button data-c="matrix">matrix</button>
+    </p>
+  </header>
+
+  <!-- Section 1: Apa itu Linux? -->
+  <section id="apa-itu">
+    <h2>Apa itu Linux?</h2>
+    <p>Linux sebenarnya adalah <em>kernel</em>, yaitu inti yang mengatur perangkat keras seperti prosesor, memori, dan disk. Kernel ini digabung dengan perangkat lunak lain (GNU, desktop, aplikasi) menjadi paket lengkap yang disebut <strong>distribusi</strong> atau distro.</p>
+    <p>Kodenya terbuka: siapa pun boleh membaca, mengubah, dan membagikannya. Itu sebabnya ada ratusan distro dengan tujuan berbeda-beda.</p>
+
+    <!-- Interactive Layer Visualizer -->
+    <div class="arch-diagram" aria-label="Diagram lapisan arsitektur sistem Linux">
+      <div class="arch-layer" data-layer="app">
+        <div class="arch-info">
+          <span class="arch-title">1. Aplikasi Pengguna (User Space)</span>
+          <span class="arch-desc">Browser, LibreOffice, Pemutar Media, Text Editor, Game</span>
+        </div>
+        <span class="arch-tag">Software</span>
+      </div>
+
+      <div class="arch-layer" data-layer="shell">
+        <div class="arch-info">
+          <span class="arch-title">2. Shell & Desktop Environment</span>
+          <span class="arch-desc">Bash, Zsh, GNOME, KDE Plasma, XFCE (Antarmuka & Terminal)</span>
+        </div>
+        <span class="arch-tag">Interface</span>
+      </div>
+
+      <div class="arch-layer kernel-layer active" data-layer="kernel">
+        <div class="arch-info">
+          <span class="arch-title">3. Kernel Linux (Inti Sistem)</span>
+          <span class="arch-desc">Manajemen memori, prosesor (CPU), jadwal proses, driver perangkat keras</span>
+        </div>
+        <span class="arch-tag" style="background:var(--sun-soft);color:#12233A;font-weight:700;">Jantung OS</span>
+      </div>
+
+      <div class="arch-layer" data-layer="hardware">
+        <div class="arch-info">
+          <span class="arch-title">4. Perangkat Keras (Hardware)</span>
+          <span class="arch-desc">CPU, RAM, Hard Disk/SSD, Kartu Grafis, Keyboard, Jaringan</span>
+        </div>
+        <span class="arch-tag">Fisik</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 2: Perjalanan Singkat -->
+  <section id="perjalanan">
+    <h2>Perjalanan singkat</h2>
+    <ul class="tl">
+      <li><strong>1991</strong> Linus Torvalds, mahasiswa Finlandia, mengumumkan kernel buatannya sebagai proyek hobi.</li>
+      <li><strong>1992</strong> Linux dirilis dengan lisensi GNU GPL, sehingga bebas dipakai dan dikembangkan bersama.</li>
+      <li><strong>1993</strong> Debian dan Slackware lahir, distro tertua yang masih dipakai sampai sekarang.</li>
+      <li><strong>2004</strong> Ubuntu hadir dan membuat Linux ramah bagi pengguna desktop biasa.</li>
+      <li><strong>2008</strong> Android, yang berbasis kernel Linux, dirilis dan menyebar ke miliaran ponsel.</li>
+    </ul>
+  </section>
+
+  <!-- Section 3: Pilih Distro -->
+  <section id="pilih-distro">
+    <h2>Pilih distro</h2>
+    <p>Tidak ada distro terbaik, hanya yang paling cocok. Ketuk untuk melihat.</p>
+
+    <!-- Interactive Distro Quick Matcher -->
+    <div class="distro-finder-box">
+      <div class="distro-finder-title">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        <span>Pencari Cepat Sesuai Kebutuhanmu:</span>
+      </div>
+      <div class="distro-chips">
+        <button class="distro-chip-btn" data-target="0">Pemula Baru</button>
+        <button class="distro-chip-btn" data-target="1">Pindahan Windows</button>
+        <button class="distro-chip-btn" data-target="2">Developer & Mutakhir</button>
+        <button class="distro-chip-btn" data-target="3">Server & Stabilitas</button>
+        <button class="distro-chip-btn" data-target="4">Pengguna Mahir</button>
+      </div>
+    </div>
+
+    <!-- Distro Tabs -->
+    <div class="tabs" role="tablist" id="tabs" aria-label="Daftar Pilihan Distribusi Linux"></div>
+
+    <!-- Distro Details Panel -->
+    <div class="panel" id="panel" role="tabpanel" aria-live="polite"></div>
+  </section>
+
+  <!-- Section 4: Perintah Dasar -->
+  <section id="perintah">
+    <h2>Perintah dasar</h2>
+    <p>Berikut kumpulan perintah terminal penting yang sering digunakan pengguna Linux sehari-hari:</p>
+
+    <div class="table-header-controls">
+      <div class="search-box">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        <input type="text" id="cmdSearch" placeholder="Cari perintah... (misal: ls, folder, salin, admin)" aria-label="Cari perintah Linux">
+      </div>
+    </div>
+
+    <div class="scroll">
+      <table id="cmdTable">
+        <thead>
+          <tr>
+            <th scope="col">Perintah</th>
+            <th scope="col">Fungsi</th>
+            <th scope="col" style="text-align:right;">Aksi</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="cmd-badge">pwd</span></td>
+            <td>Menampilkan folder tempat kamu berada</td>
+            <td style="text-align:right;">
+              <div class="action-btns" style="justify-content: flex-end;">
+                <button class="row-btn copy-btn" data-copy="pwd" title="Salin perintah">Salin</button>
+                <button class="row-btn run-btn" data-run="pwd" title="Coba jalankan di terminal">Coba</button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td><span class="cmd-badge">ls</span></td>
+            <td>Melihat isi folder</td>
+            <td style="text-align:right;">
+              <div class="action-btns" style="justify-content: flex-end;">
+                <button class="row-btn copy-btn" data-copy="ls" title="Salin perintah">Salin</button>
+                <button class="row-btn run-btn" data-run="ls" title="Coba jalankan di terminal">Coba</button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td><span class="cmd-badge">cd folder</span></td>
+            <td>Pindah ke folder lain</td>
+            <td style="text-align:right;">
+              <div class="action-btns" style="justify-content: flex-end;">
+                <button class="row-btn copy-btn" data-copy="cd dokumen" title="Salin perintah">Salin</button>
+                <button class="row-btn run-btn" data-run="cd dokumen" title="Coba jalankan di terminal">Coba</button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td><span class="cmd-badge">mkdir nama</span></td>
+            <td>Membuat folder baru</td>
+            <td style="text-align:right;">
+              <div class="action-btns" style="justify-content: flex-end;">
+                <button class="row-btn copy-btn" data-copy="mkdir proyek_baru" title="Salin perintah">Salin</button>
+                <button class="row-btn run-btn" data-run="mkdir proyek_baru" title="Coba jalankan di terminal">Coba</button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td><span class="cmd-badge">cp a b</span></td>
+            <td>Menyalin berkas a menjadi b</td>
+            <td style="text-align:right;">
+              <div class="action-btns" style="justify-content: flex-end;">
+                <button class="row-btn copy-btn" data-copy="cp berkas.txt cadangan.txt" title="Salin perintah">Salin</button>
+                <button class="row-btn run-btn" data-run="cp tentang.txt tentang_backup.txt" title="Coba jalankan di terminal">Coba</button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td><span class="cmd-badge">mv a b</span></td>
+            <td>Memindahkan atau mengganti nama berkas</td>
+            <td style="text-align:right;">
+              <div class="action-btns" style="justify-content: flex-end;">
+                <button class="row-btn copy-btn" data-copy="mv lama.txt baru.txt" title="Salin perintah">Salin</button>
+                <button class="row-btn run-btn" data-run="mv lama.txt baru.txt" title="Coba jalankan di terminal">Coba</button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td><span class="cmd-badge">rm berkas</span></td>
+            <td>Menghapus berkas (tidak masuk tempat sampah)</td>
+            <td style="text-align:right;">
+              <div class="action-btns" style="justify-content: flex-end;">
+                <button class="row-btn copy-btn" data-copy="rm catatan.txt" title="Salin perintah">Salin</button>
+                <button class="row-btn run-btn" data-run="rm catatan.txt" title="Coba jalankan di terminal">Coba</button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td><span class="cmd-badge">man perintah</span></td>
+            <td>Membuka panduan lengkap sebuah perintah</td>
+            <td style="text-align:right;">
+              <div class="action-btns" style="justify-content: flex-end;">
+                <button class="row-btn copy-btn" data-copy="man ls" title="Salin perintah">Salin</button>
+                <button class="row-btn run-btn" data-run="man ls" title="Coba jalankan di terminal">Coba</button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td><span class="cmd-badge">sudo</span></td>
+            <td>Menjalankan perintah dengan hak admin</td>
+            <td style="text-align:right;">
+              <div class="action-btns" style="justify-content: flex-end;">
+                <button class="row-btn copy-btn" data-copy="sudo apt update" title="Salin perintah">Salin</button>
+                <button class="row-btn run-btn" data-run="sudo apt update" title="Coba jalankan di terminal">Coba</button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Section 5: Kenapa Orang Memakai Linux -->
+  <section id="keunggulan">
+    <h2>Kenapa orang memakai Linux</h2>
+    <div class="why">
+      <div class="why-card">
+        <div class="why-icon" aria-hidden="true">
+          <!-- Piggy Bank / Free Icon -->
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 5c-1.5 0-2.8 1.4-3 2-3.5-1.5-11-.3-11 5 0 1.8 0 3 2 4.5V20h4v-2h3v2h4v-4c1-.5 1.7-1 2-2h1l1-3c0-2-1-3-3-6z"></path><path d="M16 9h.01"></path></svg>
+        </div>
+        <h3>Gratis</h3>
+        <p>Tanpa biaya lisensi, dan boleh dipasang di berapa pun komputer.</p>
+      </div>
+
+      <div class="why-card">
+        <div class="why-icon" aria-hidden="true">
+          <!-- Feather / Lightweight Icon -->
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z"></path><line x1="16" y1="8" x2="2" y2="22"></line><line x1="17.5" y1="15" x2="9" y2="15"></line></svg>
+        </div>
+        <h3>Ringan</h3>
+        <p>Banyak distro berjalan lancar di laptop lama yang sudah berat memakai sistem lain.</p>
+      </div>
+
+      <div class="why-card">
+        <div class="why-icon" aria-hidden="true">
+          <!-- Shield / Security Icon -->
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><path d="M9 12l2 2 4-4"></path></svg>
+        </div>
+        <h3>Aman</h3>
+        <p>Pengelolaan izin yang ketat dan pembaruan cepat dari komunitas.</p>
+      </div>
+
+      <div class="why-card">
+        <div class="why-icon" aria-hidden="true">
+          <!-- Sliders / Customization Icon -->
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"></line><line x1="4" y1="10" x2="4" y2="3"></line><line x1="12" y1="21" x2="12" y2="12"></line><line x1="12" y1="8" x2="12" y2="3"></line><line x1="20" y1="21" x2="20" y2="16"></line><line x1="20" y1="12" x2="20" y2="3"></line><line x1="1" y1="14" x2="7" y2="14"></line><line x1="9" y1="8" x2="15" y2="8"></line><line x1="17" y1="16" x2="23" y2="16"></line></svg>
+        </div>
+        <h3>Bisa diubah</h3>
+        <p>Tampilan, perilaku, sampai kernelnya bisa disesuaikan sesuai selera.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-content">
+      <div>Halaman pengantar Linux. Tux, si pinguin maskot Linux, dibuat oleh Larry Ewing pada 1996.</div>
+      <div class="footer-tux-badge">
+        <span>🐧 Dirancang untuk Semua Orang</span>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<!-- ==========================================================================
+     AI ASSISTANT (TUX AI) - FLOATING CHAT WIDGET
+     ========================================================================== -->
+<!-- Floating FAB Trigger Button -->
+<button class="ai-trigger-fab" id="aiTriggerBtn" aria-expanded="false" aria-controls="aiChatWindow" aria-label="Buka Asisten AI Tux untuk tanya jawab seputar Linux">
+  <!-- Tux Mascot Mini SVG -->
+  <svg class="fab-icon" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <path d="M16 2C11.58 2 8 5.58 8 10V18C8 22.42 11.58 26 16 26C20.42 26 24 22.42 24 18V10C24 5.58 20.42 2 16 2Z" fill="#12233A"/>
+    <path d="M16 12C13.24 12 11 14.69 11 18C11 21.31 13.24 24 16 24C18.76 24 21 21.31 21 18C21 14.69 18.76 12 16 12Z" fill="#FFFFFF"/>
+    <circle cx="14" cy="8.5" r="1.2" fill="#F5B82E"/>
+    <circle cx="18" cy="8.5" r="1.2" fill="#F5B82E"/>
+    <path d="M14 11.5H18L16 13.5L14 11.5Z" fill="#F5B82E"/>
+    <ellipse cx="10" cy="27" rx="3.5" ry="1.5" fill="#F5B82E"/>
+    <ellipse cx="22" cy="27" rx="3.5" ry="1.5" fill="#F5B82E"/>
+  </svg>
+  <span>Tanya Tux AI</span>
+  <span class="ai-badge-dot"></span>
+</button>
+
+<!-- Floating Chat Window -->
+<aside class="ai-chat-window" id="aiChatWindow" role="dialog" aria-labelledby="aiTitle" aria-hidden="true">
+  <div class="ai-header">
+    <div class="ai-header-info">
+      <div class="ai-avatar">
+        <!-- Tux Face Mini SVG -->
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <circle cx="12" cy="12" r="10" fill="#12233A"/>
+          <ellipse cx="12" cy="15" rx="5" ry="6" fill="#FFFFFF"/>
+          <circle cx="9.5" cy="9.5" r="1.5" fill="#FFFFFF"/>
+          <circle cx="14.5" cy="9.5" r="1.5" fill="#FFFFFF"/>
+          <circle cx="9.5" cy="9.5" r="0.8" fill="#12233A"/>
+          <circle cx="14.5" cy="9.5" r="0.8" fill="#12233A"/>
+          <polygon points="12,11 10,13 14,13" fill="#F5B82E"/>
+        </svg>
+      </div>
+      <div class="ai-header-text">
+        <h4 id="aiTitle">Tux Assistant AI</h4>
+        <span class="status-pill">Siap Membantu</span>
+      </div>
+    </div>
+    <div class="ai-header-actions">
+      <button id="clearChatBtn" title="Hapus riwayat percakapan" aria-label="Hapus riwayat">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+      </button>
+      <button id="closeAiBtn" title="Tutup asisten" aria-label="Tutup jendela chat">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Chat Messages Container -->
+  <div class="ai-messages" id="aiMessages" aria-live="polite">
+    <div class="ai-msg bot">
+      <div class="ai-bubble">
+        Halo! Saya <b>Tux</b>, asisten pintar pemula Linux 🐧. Ada yang ingin kamu tanyakan tentang Linux, rekomendasi distro, atau perintah terminal?
+      </div>
+    </div>
+  </div>
+
+  <!-- Suggested Question Quick Chips -->
+  <div class="ai-quick-chips" aria-label="Pertanyaan cepat yang disarankan">
+    <button class="chip-btn" data-q="Distro apa yang paling cocok untuk pemula?">Distro untuk pemula?</button>
+    <button class="chip-btn" data-q="Laptop saya spek rendah dan lemot, pakai distro apa?">Laptop kentang pakai apa?</button>
+    <button class="chip-btn" data-q="Apa bedanya Linux dengan Windows?">Beda Linux vs Windows?</button>
+    <button class="chip-btn" data-q="Apakah di Linux bisa main game?">Bisa main game?</button>
+    <button class="chip-btn" data-q="Apa fungsi perintah sudo di terminal?">Apa itu sudo?</button>
+    <button class="chip-btn" data-q="Bagaimana cara mencoba Linux tanpa menghapus Windows?">Coba tanpa instal?</button>
+  </div>
+
+  <!-- Input Field -->
+  <form class="ai-input-bar" id="aiForm" onsubmit="return false">
+    <input type="text" id="aiInput" placeholder="Ketik pertanyaan seputar Linux..." autocomplete="off">
+    <button type="submit" class="ai-send-btn" id="aiSendBtn" aria-label="Kirim pertanyaan">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+    </button>
+  </form>
+</aside>
+
+<!-- Toast Message Container -->
+<div class="toast" id="toastBox" role="status" aria-live="polite">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#34D399" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+  <span id="toastMsg">Tersalin ke papan klip!</span>
+</div>
+
+<!-- ==========================================================================
+     CORE JAVASCRIPT: TERMINAL, DISTROS, AI CHATBOT & INTERACTIVITY
+     ========================================================================== -->
+<script>
+(function(){
+  "use strict";
+
+  // --- THEME SWITCHER (Light / Dark) ---
+  var themeToggle = document.getElementById('themeToggle');
+  var root = document.documentElement;
+  
+  function getPreferredTheme() {
+    var stored = localStorage.getItem('linux_theme');
+    if (stored) return stored;
+    return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  }
+
+  function applyTheme(t) {
+    root.setAttribute('data-theme', t);
+    localStorage.setItem('linux_theme', t);
+  }
+
+  applyTheme(getPreferredTheme());
+
+  if (themeToggle) {
+    themeToggle.addEventListener('click', function() {
+      var current = root.getAttribute('data-theme');
+      var next = (current === 'dark') ? 'light' : 'dark';
+      applyTheme(next);
+      showToast('Mode tema diubah ke: ' + (next === 'dark' ? 'Gelap 🌙' : 'Terang ☀️'));
+    });
+  }
+
+  // --- TOAST UTILITY ---
+  var toastBox = document.getElementById('toastBox');
+  var toastMsg = document.getElementById('toastMsg');
+  var toastTimer = null;
+
+  function showToast(msg) {
+    if (!toastBox || !toastMsg) return;
+    toastMsg.textContent = msg;
+    toastBox.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function() {
+      toastBox.classList.remove('show');
+    }, 2400);
+  }
+
+  // --- TERMINAL SIMULATION ENGINE ---
+  var out = document.getElementById('out');
+  var inp = document.getElementById('c');
+  var f = document.getElementById('f');
+  var clearTermBtn = document.getElementById('clearTermBtn');
+  var copyTermBtn = document.getElementById('copyTermBtn');
+  var hist = [];
+  var hi = 0;
+
+  var cmds = {
+    help: "Perintah simulasi yang dapat kamu coba:\n" +
+          "  help               - Menampilkan daftar panduan ini\n" +
+          "  ls                 - Melihat daftar berkas dan folder\n" +
+          "  pwd                - Menampilkan folder aktif saat ini\n" +
+          "  whoami             - Menampilkan nama pengguna\n" +
+          "  date               - Menampilkan tanggal & jam sistem\n" +
+          "  uname -a           - Menampilkan informasi kernel Linux\n" +
+          "  neofetch           - Menampilkan logo Tux dan spesifikasi sistem\n" +
+          "  cat tentang.txt    - Membaca isi berkas tentang.txt\n" +
+          "  echo [teks]        - Mencetak kembali teks ke layar\n" +
+          "  clear              - Membersihkan layar terminal\n" +
+          "  matrix             - Animasi efek digital rain",
+    ls: "tentang.txt  dokumen/  unduhan/  musik/  proyek/  tux.sh",
+    "ls -l": "total 28\n-rw-r--r-- 1 tamu tamu  142 Nov  9 09:00 tentang.txt\ndrwxr-xr-x 2 tamu tamu 4096 Nov  9 09:00 dokumen\ndrwxr-xr-x 2 tamu tamu 4096 Nov  9 09:00 unduhan\ndrwxr-xr-x 2 tamu tamu 4096 Nov  9 09:00 musik\ndrwxr-xr-x 4 tamu tamu 4096 Nov  9 09:00 proyek\n-rwxr-xr-x 1 tamu tamu  850 Nov  9 09:00 tux.sh",
+    pwd: "/home/tamu",
+    whoami: "tamu",
+    "uname -a": "Linux linux-id 6.8.0 #1 SMP PREEMPT_DYNAMIC x86_64 GNU/Linux",
+    neofetch: "       .--.       tamu@linux-id\n" +
+              "      |o_o |      -------------\n" +
+              "      |:_/ |      OS: Linux (distro pilihanmu)\n" +
+              "     //   \\ \\     Kernel: 6.8.0-generic\n" +
+              "    (|     | )    Shell: bash 5.2.21\n" +
+              "   /'\\_   _/`\\    Lisensi: GPL (100% Bebas)\n" +
+              "   \\___)=(___/    Status: Sistem stabil & aman",
+    "cat tentang.txt": "Linux dibuat oleh Linus Torvalds pada 1991.\nKodenya terbuka dan dikembangkan ribuan orang di seluruh dunia.\n\"Talk is cheap. Show me the code.\" — Linus Torvalds",
+    matrix: "Wake up, Neo...\nThe Matrix has you...\nLinux runs on supercomputers, servers, and beyond!"
+  };
+
+  function appendTerm(t) {
+    if (!out) return;
+    out.textContent += t + "\n";
+    out.scrollTop = out.scrollHeight;
+  }
+
+  function runTerm(v) {
+    if (!out) return;
+    v = v.trim();
+    appendTerm("tamu@linux:~$ " + v);
+    if (!v) return;
+
+    if (v === "clear") {
+      out.textContent = "";
+      return;
+    }
+    if (v === "date") {
+      appendTerm(new Date().toString());
+      return;
+    }
+    if (v.indexOf("echo ") === 0) {
+      appendTerm(v.slice(5));
+      return;
+    }
+    if (v.indexOf("sudo") === 0) {
+      appendTerm("Nice try. Akun tamu tidak punya hak admin. Di Linux aslimu, kamu punya kendali penuh!");
+      return;
+    }
+    if (v.indexOf("rm") === 0) {
+      appendTerm("rm: operasi ditolak. Ini hanya simulasi, aman dari penghapusan!");
+      return;
+    }
+    if (v.indexOf("cd ") === 0) {
+      var target = v.slice(3).trim();
+      appendTerm("Berpindah ke direktori: /home/tamu/" + target + "\n(Ketik 'pwd' untuk mengecek)");
+      return;
+    }
+    if (v.indexOf("mkdir ") === 0) {
+      var dirName = v.slice(6).trim();
+      appendTerm("Folder '" + dirName + "' berhasil dibuat.");
+      return;
+    }
+    if (v.indexOf("man ") === 0) {
+      var manCmd = v.slice(4).trim();
+      appendTerm("MANUAL: Menampilkan dokumentasi resmi untuk '" + manCmd + "'.\nGunakan 'help' untuk melihat daftar perintah simulator.");
+      return;
+    }
+    if (v === "matrix") {
+      appendTerm(cmds.matrix);
+      return;
+    }
+
+    if (cmds[v]) {
+      appendTerm(cmds[v]);
+    } else {
+      appendTerm("bash: " + v.split(" ")[0] + ": perintah tidak ditemukan. Ketik help.");
+    }
+  }
+
+  // Initial welcome message in terminal
+  appendTerm("Selamat datang di terminal simulasi Linux! 🐧\nKetik 'help' lalu tekan Enter untuk melihat perintah.");
+
+  if (inp) {
+    inp.addEventListener('keydown', function(e) {
+      if (e.key === "Enter") {
+        var val = inp.value;
+        if (val.trim()) {
+          hist.push(val);
+          hi = hist.length;
+        }
+        runTerm(val);
+        inp.value = "";
+      } else if (e.key === "ArrowUp" && hi > 0) {
+        hi--;
+        inp.value = hist[hi] || "";
+        e.preventDefault();
+      } else if (e.key === "ArrowDown" && hi < hist.length) {
+        hi++;
+        inp.value = hist[hi] || "";
+        e.preventDefault();
+      } else if (e.key === "Tab") {
+        e.preventDefault();
+        var cur = inp.value.trim();
+        var keys = Object.keys(cmds);
+        var match = keys.filter(function(k){ return k.indexOf(cur) === 0; });
+        if (match.length === 1) {
+          inp.value = match[0];
+        } else if (match.length > 1) {
+          appendTerm("\nSaran: " + match.join(", "));
+        }
+      }
+    });
+  }
+
+  if (clearTermBtn) {
+    clearTermBtn.addEventListener('click', function() {
+      if (out) out.textContent = "";
+    });
+  }
+
+  if (copyTermBtn) {
+    copyTermBtn.addEventListener('click', function() {
+      if (!out) return;
+      navigator.clipboard.writeText(out.textContent).then(function() {
+        showToast("Output terminal disalin ke clipboard!");
+      });
+    });
+  }
+
+  // Quick hint buttons under terminal
+  document.querySelectorAll('.hint button').forEach(function(b) {
+    b.onclick = function() {
+      var command = b.getAttribute('data-c');
+      if (command) {
+        runTerm(command);
+        if (out) out.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    };
+  });
+
+  // --- ARCHITECTURE DIAGRAM INTERACTIVITY ---
+  var archLayers = document.querySelectorAll('.arch-layer');
+  archLayers.forEach(function(layer) {
+    layer.addEventListener('click', function() {
+      archLayers.forEach(function(l){ l.classList.remove('active'); });
+      layer.classList.add('active');
+    });
+  });
+
+  // --- DISTRO DATA & TABS SYSTEM ---
+  var D = [
+    [
+      "Ubuntu",
+      "Pemula",
+      "Paling populer untuk desktop. Pembaruan teratur, komunitas besar, dan banyak tutorial berbahasa Indonesia.",
+      "Cocok untuk: pengguna baru, kantor, belajar.",
+      "https://ubuntu.com"
+    ],
+    [
+      "Linux Mint",
+      "Pindahan dari Windows",
+      "Tampilannya akrab dengan menu di kiri bawah. Langsung siap pakai, termasuk codec media.",
+      "Cocok untuk: laptop lama dan pengguna yang ingin mudah.",
+      "https://linuxmint.com"
+    ],
+    [
+      "Fedora",
+      "Terbaru",
+      "Memakai teknologi terbaru lebih dulu, dengan dukungan kuat dari Red Hat.",
+      "Cocok untuk: pengembang yang ingin software mutakhir.",
+      "https://fedoraproject.org"
+    ],
+    [
+      "Debian",
+      "Stabil",
+      "Dikenal sangat stabil dan menjadi dasar banyak distro lain, termasuk Ubuntu.",
+      "Cocok untuk: server dan sistem yang tak boleh sering rusak.",
+      "https://debian.org"
+    ],
+    [
+      "Arch Linux",
+      "Mahir",
+      "Dipasang dari nol dan disusun sendiri. Dokumentasinya (ArchWiki) sangat lengkap.",
+      "Cocok untuk: yang ingin paham isi sistem dan kontrol penuh.",
+      "https://archlinux.org"
+    ]
+  ];
+
+  var T = document.getElementById('tabs');
+  var P = document.getElementById('panel');
+
+  function showDistro(i) {
+    if (!T || !P || !D[i]) return;
+    Array.prototype.forEach.call(T.children, function(b, j) {
+      b.setAttribute('aria-selected', j === i ? 'true' : 'false');
+      b.tabIndex = j === i ? 0 : -1;
+    });
+
+    // Update active state in chip buttons
+    document.querySelectorAll('.distro-chip-btn').forEach(function(chip) {
+      chip.classList.toggle('active', parseInt(chip.dataset.target, 10) === i);
+    });
+
+    var d = D[i];
+    P.innerHTML =
+      "<h3>" + d[0] + " <small>" + d[1] + "</small></h3>" +
+      "<p>" + d[2] + "</p>" +
+      "<small class='recommendation'>" + d[3] + "</small>";
+  }
+
+  if (T) {
+    D.forEach(function(d, i) {
+      var b = document.createElement('button');
+      b.role = "tab";
+      b.id = "distro-tab-" + i;
+      b.setAttribute('aria-controls', 'panel');
+      b.innerHTML = "<span>" + d[0] + "</span>";
+      b.onclick = function() { showDistro(i); };
+      T.appendChild(b);
+    });
+    showDistro(0);
+  }
+
+  // Quick Distro Finder Buttons
+  document.querySelectorAll('.distro-chip-btn').forEach(function(chip) {
+    chip.addEventListener('click', function() {
+      var idx = parseInt(chip.getAttribute('data-target'), 10);
+      showDistro(idx);
+      if (P) P.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    });
+  });
+
+  // --- COMMAND TABLE: SEARCH & ACTIONS ---
+  var cmdSearch = document.getElementById('cmdSearch');
+  var cmdTable = document.getElementById('cmdTable');
+
+  if (cmdSearch && cmdTable) {
+    cmdSearch.addEventListener('input', function() {
+      var query = cmdSearch.value.toLowerCase().trim();
+      var rows = cmdTable.querySelectorAll('tbody tr');
+      rows.forEach(function(tr) {
+        var text = tr.textContent.toLowerCase();
+        tr.style.display = text.indexOf(query) !== -1 ? '' : 'none';
+      });
+    });
+  }
+
+  // Copy command button
+  document.querySelectorAll('.copy-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var cmd = btn.getAttribute('data-copy');
+      if (cmd) {
+        navigator.clipboard.writeText(cmd).then(function() {
+          showToast("Perintah '" + cmd + "' disalin!");
+        });
+      }
+    });
+  });
+
+  // Run in terminal button
+  document.querySelectorAll('.run-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var cmd = btn.getAttribute('data-run');
+      if (cmd) {
+        runTerm(cmd);
+        var termEl = document.querySelector('.term');
+        if (termEl) {
+          termEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+        showToast("Perintah '" + cmd + "' dijalankan di terminal!");
+      }
+    });
+  });
+
+  // ==========================================================================
+  // SMART AI ASSISTANT ("TUX AI BOT") FOR SIMPLE QUESTIONS
+  // ==========================================================================
+  var aiTriggerBtn = document.getElementById('aiTriggerBtn');
+  var aiChatWindow = document.getElementById('aiChatWindow');
+  var closeAiBtn = document.getElementById('closeAiBtn');
+  var clearChatBtn = document.getElementById('clearChatBtn');
+  var aiMessages = document.getElementById('aiMessages');
+  var aiForm = document.getElementById('aiForm');
+  var aiInput = document.getElementById('aiInput');
+
+  function toggleAiChat(open) {
+    if (!aiChatWindow || !aiTriggerBtn) return;
+    var isOpen = open !== undefined ? open : !aiChatWindow.classList.contains('open');
+    if (isOpen) {
+      aiChatWindow.classList.add('open');
+      aiChatWindow.setAttribute('aria-hidden', 'false');
+      aiTriggerBtn.setAttribute('aria-expanded', 'true');
+      if (aiInput) setTimeout(function(){ aiInput.focus(); }, 150);
+    } else {
+      aiChatWindow.classList.remove('open');
+      aiChatWindow.setAttribute('aria-hidden', 'true');
+      aiTriggerBtn.setAttribute('aria-expanded', 'false');
+    }
+  }
+
+  if (aiTriggerBtn) {
+    aiTriggerBtn.addEventListener('click', function() {
+      toggleAiChat();
+    });
+  }
+
+  if (closeAiBtn) {
+    closeAiBtn.addEventListener('click', function() {
+      toggleAiChat(false);
+    });
+  }
+
+  if (clearChatBtn) {
+    clearChatBtn.addEventListener('click', function() {
+      if (!aiMessages) return;
+      aiMessages.innerHTML =
+        '<div class="ai-msg bot">' +
+        '<div class="ai-bubble">Riwayat chat telah dibersihkan. Halo! Ada yang ingin kamu tanyakan lagi seputar Linux? 🐧</div>' +
+        '</div>';
+    });
+  }
+
+  // Knowledge Base & NLP Matching for Simple Linux Questions
+  var aiQA = [
+    {
+      keywords: ["pemula", "baru", "rekomendasi distro", "pilih distro", "distro terbaik", "pertama"],
+      answer: "Untuk pemula, rekomendasi terbaik adalah **Ubuntu** atau **Linux Mint**.\n\n• **Linux Mint**: Sangat ramah untuk pengguna pindahan Windows karena susunan menu yang familiar.\n• **Ubuntu**: Distro paling populer dengan dukungan komunitas sangat besar dan ribuan tutorial berbahasa Indonesia!"
+    },
+    {
+      keywords: ["windows", "pindah dari windows", "beda windows", "vs windows"],
+      answer: "**Perbedaan utama Linux vs Windows:**\n\n1. **Gratis & Bebas**: Linux 100% gratis tanpa lisensi berbayar.\n2. **Privasi**: Tidak ada telemetri paksa atau pelacakan iklan.\n3. **Ringan & Cepat**: Tidak membebani hardware dan tidak memakan RAM berlebih.\n4. **Pembaruan**: Update sistem di Linux cepat dan jarang mewajibkan restart paksa."
+    },
+    {
+      keywords: ["laptop lama", "spek rendah", "kentang", "ram 2gb", "ram 4gb", "lemot", "ringan"],
+      answer: "Untuk laptop lama atau spesifikasi rendah:\n\n• **Linux Mint (XFCE Edition)**: Ringan dan sangat stabil.\n• **Lubuntu / Xubuntu**: Menggunakan desktop LXQt/XFCE yang sangat hemat RAM (bahkan lancar di RAM 2GB).\n• **Debian**: Sangat minim penggunaan resource."
+    },
+    {
+      keywords: ["game", "gaming", "steam", "main game", "dota", "valorant", "gta"],
+      answer: "Bisa banget! Berkat teknologi **Steam Proton** dari Valve, lebih dari 80% game Windows di Steam dapat berjalan mulus di Linux (termasuk Cyberpunk 2077, GTA V, Elden Ring, dll).\n\n*Catatan*: Beberapa game dengan anti-cheat berbasis kernel tingkat rendah (seperti Valorant Vanguard) saat ini belum didukung di Linux."
+    },
+    {
+      keywords: ["sudo", "hak admin", "root", "apa itu sudo", "administrator"],
+      answer: "<b>sudo</b> singkatan dari <i>'Superuser Do'</i>.\n\nPerintah ini memberi izin sementara kepada pengguna biasa untuk menjalankan perintah penting setingkat Administrator (seperti menginstal aplikasi baru, memperbarui sistem, atau mengedit berkas konfigurasi sistem)."
+    },
+    {
+      keywords: ["instal", "aplikasi", "software", "pasang aplikasi", "install"],
+      answer: "Cara instal aplikasi di Linux sangat mudah:\n\n1. **Software Center**: Toko aplikasi grafis seperti App Store / Play Store (tinggal klik 'Install').\n2. **Terminal**: Menggunakan manajer paket (contoh di Ubuntu: <code>sudo apt install vlc</code>).\n3. **Flatpak / Snap**: Format aplikasi universal yang bisa dipasang di distro mana saja."
+    },
+    {
+      keywords: ["coba", "tanpa instal", "live usb", "flashdisk", "dual boot"],
+      answer: "Kamu bisa mencoba Linux **tanpa menghapus Windows**!\n\nCukup buat **Live USB** menggunakan flashdisk dan software gratis seperti *BalenaEtcher* atau *Rufus*. Masukkan flashdisk, restart komputer, dan kamu bisa langsung menjelajahi Linux tanpa menyentuh harddisk sama sekali!"
+    },
+    {
+      keywords: ["virus", "aman", "antivirus", "malware", "keamanan"],
+      answer: "Linux sangat aman karena arsitektur perizinan yang ketat. Berkas program tidak bisa dieksekusi begitu saja tanpa izin khusus dari pengguna (<code>chmod</code> atau <code>sudo</code>). Selain itu kodenya diaudit oleh ribuan pakar keamanan dunia!"
+    },
+    {
+      keywords: ["kernel", "apa itu kernel", "pengertian kernel", "gnu"],
+      answer: "**Kernel** adalah komponen paling inti dari sistem operasi yang bertindak sebagai jembatan antara perangkat keras (CPU, memori, hard disk) dengan perangkat lunak yang kamu gunakan."
+    },
+    {
+      keywords: ["perintah", "command", "dasar", "terminal"],
+      answer: "Beberapa perintah dasar yang wajib diketahui:\n\n• <code>pwd</code>: Melihat posisi folder aktif\n• <code>ls</code>: Melihat isi folder\n• <code>cd nama_folder</code>: Berpindah folder\n• <code>mkdir nama</code>: Membuat folder baru\n• <code>sudo apt update</code>: Memperbarui daftar paket"
+    },
+    {
+      keywords: ["arch", "arch linux", "mahir"],
+      answer: "**Arch Linux** adalah distro independen untuk pengguna mahir yang ingin merakit sistem operasinya sendiri dari awal. Memiliki sistem rilis bergulir (*rolling release*) dan dokumentasi resmi (ArchWiki) terbaik di dunia Linux!"
+    },
+    {
+      keywords: ["halo", "hai", "selamat", "pagi", "siang", "malam", "siapa kamu"],
+      answer: "Halo! Saya **Tux**, asisten cerdas pemula Linux. Tanyakan apa saja tentang Linux, distro yang cocok untukmu, atau cara menggunakan terminal!"
+    },
+    {
+      keywords: ["terima kasih", "makasih", "thanks", "ok", "oke"],
+      answer: "Sama-sama! Senang bisa membantu perjalanan belajarmu di dunia Linux. Jangan ragu bertanya lagi ya! 🐧"
+    }
+  ];
+
+  function getAiResponse(query) {
+    query = query.toLowerCase().trim();
+    if (!query) return "Silakan ketik pertanyaanmu tentang Linux ya!";
+
+    var bestMatch = null;
+    var maxScore = 0;
+
+    for (var i = 0; i < aiQA.length; i++) {
+      var item = aiQA[i];
+      var score = 0;
+      for (var k = 0; k < item.keywords.length; k++) {
+        var word = item.keywords[k];
+        if (query.indexOf(word) !== -1) {
+          score += word.length * 2;
+        }
+      }
+      if (score > maxScore) {
+        maxScore = score;
+        bestMatch = item.answer;
+      }
+    }
+
+    if (bestMatch && maxScore > 3) {
+      return bestMatch;
+    }
+
+    return "Pertanyaan menarik! Mengenai *" + query + "*:\n\nLinux adalah sistem operasi bebas dan terbuka. Kamu bisa mencoba perintah di terminal simulasi di atas, atau tanyakan topik populer seperti: **'distro untuk pemula'**, **'beda Linux dan Windows'**, atau **'apa fungsi sudo'**!";
+  }
+
+  function appendAiMessage(sender, text) {
+    if (!aiMessages) return;
+    var msgDiv = document.createElement('div');
+    msgDiv.className = 'ai-msg ' + sender;
+    
+    // Replace newlines with breaks and bold tags
+    var formatted = text
+      .replace(/\n\n/g, '<br><br>')
+      .replace(/\n/g, '<br>')
+      .replace(/\*\*(.*?)\*\*/g, '<b>$1</b>');
+
+    msgDiv.innerHTML = '<div class="ai-bubble">' + formatted + '</div>';
+    aiMessages.appendChild(msgDiv);
+    aiMessages.scrollTop = aiMessages.scrollHeight;
+  }
+
+  function handleAiSubmit() {
+    if (!aiInput) return;
+    var q = aiInput.value.trim();
+    if (!q) return;
+
+    appendAiMessage('user', q);
+    aiInput.value = "";
+
+    // Show typing dots animation
+    var typingDiv = document.createElement('div');
+    typingDiv.className = 'ai-msg bot typing-row';
+    typingDiv.innerHTML = '<div class="ai-bubble"><div class="typing-indicator"><span></span><span></span><span></span></div></div>';
+    aiMessages.appendChild(typingDiv);
+    aiMessages.scrollTop = aiMessages.scrollHeight;
+
+    setTimeout(function() {
+      if (typingDiv && typingDiv.parentNode) {
+        typingDiv.parentNode.removeChild(typingDiv);
+      }
+      var ans = getAiResponse(q);
+      appendAiMessage('bot', ans);
+    }, 450);
+  }
+
+  if (aiForm) {
+    aiForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      handleAiSubmit();
+    });
+  }
+
+  // Quick suggestion chips inside chat
+  document.querySelectorAll('.ai-quick-chips .chip-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var question = btn.getAttribute('data-q');
+      if (question && aiInput) {
+        aiInput.value = question;
+        handleAiSubmit();
+      }
+    });
+  });
+
+
+
+  // --- EFEK INTRO: DAUN BERJATUHAN (~3 DETIK) ---
+  (function initFallingLeavesIntro() {
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      return;
+    }
+
+    function launchLeaves() {
+      var overlay = document.createElement('div');
+      overlay.id = 'leafIntroOverlay';
+      overlay.setAttribute('aria-hidden', 'true');
+
+      // 3 bentuk daun SVG unik buatan sendiri
+      var leafShapes = [
+        // 1. Daun oval dengan tulang daun
+        function(id, c1, c2) {
+          return '<svg viewBox="0 0 40 40" width="100%" height="100%" fill="none" xmlns="http://www.w3.org/2000/svg">' +
+            '<defs><linearGradient id="' + id + '" x1="0%" y1="0%" x2="100%" y2="100%">' +
+            '<stop offset="0%" stop-color="' + c1 + '"/><stop offset="100%" stop-color="' + c2 + '"/>' +
+            '</linearGradient></defs>' +
+            '<path d="M20 2 C29 8 37 18 33 30 C29 38 19 38 10 32 C4 23 8 10 20 2 Z" fill="url(#' + id + ')"/>' +
+            '<path d="M20 4 C19 15 18 25 19 36" stroke="rgba(255,255,255,0.5)" stroke-width="1.3" stroke-linecap="round"/>' +
+            '<path d="M19 12 C24 10 28 13 30 16" stroke="rgba(255,255,255,0.3)" stroke-width="0.8" stroke-linecap="round"/>' +
+            '<path d="M19 18 C14 17 10 20 8 23" stroke="rgba(255,255,255,0.3)" stroke-width="0.8" stroke-linecap="round"/>' +
+            '<path d="M19 25 C24 23 27 26 29 28" stroke="rgba(255,255,255,0.3)" stroke-width="0.8" stroke-linecap="round"/>' +
+            '</svg>';
+        },
+        // 2. Daun runcing (lanceolate)
+        function(id, c1, c2) {
+          return '<svg viewBox="0 0 30 46" width="100%" height="100%" fill="none" xmlns="http://www.w3.org/2000/svg">' +
+            '<defs><linearGradient id="' + id + '" x1="0%" y1="0%" x2="100%" y2="100%">' +
+            '<stop offset="0%" stop-color="' + c1 + '"/><stop offset="100%" stop-color="' + c2 + '"/>' +
+            '</linearGradient></defs>' +
+            '<path d="M15 2 C23 12 28 26 23 38 C20 44 14 44 10 40 C4 30 7 14 15 2 Z" fill="url(#' + id + ')"/>' +
+            '<path d="M15 3 C16 16 15 30 14 42" stroke="rgba(255,255,255,0.45)" stroke-width="1.1" stroke-linecap="round"/>' +
+            '<path d="M15 14 C19 12 22 15 24 17" stroke="rgba(255,255,255,0.25)" stroke-width="0.75" stroke-linecap="round"/>' +
+            '<path d="M15 22 C11 20 8 23 6 25" stroke="rgba(255,255,255,0.25)" stroke-width="0.75" stroke-linecap="round"/>' +
+            '</svg>';
+        },
+        // 3. Daun bergerigi sederhana
+        function(id, c1, c2) {
+          return '<svg viewBox="0 0 36 42" width="100%" height="100%" fill="none" xmlns="http://www.w3.org/2000/svg">' +
+            '<defs><linearGradient id="' + id + '" x1="0%" y1="0%" x2="100%" y2="100%">' +
+            '<stop offset="0%" stop-color="' + c1 + '"/><stop offset="100%" stop-color="' + c2 + '"/>' +
+            '</linearGradient></defs>' +
+            '<path d="M18 2 L22 8 L27 8 L25 15 L31 17 L27 24 L32 28 L25 35 C20 40 14 40 9 35 L4 29 L8 24 L3 18 L9 15 L7 8 L13 8 Z" fill="url(#' + id + ')"/>' +
+            '<path d="M18 4 L18 38" stroke="rgba(255,255,255,0.45)" stroke-width="1.2" stroke-linecap="round"/>' +
+            '<path d="M18 14 L24 11" stroke="rgba(255,255,255,0.3)" stroke-width="0.8"/>' +
+            '<path d="M18 20 L11 17" stroke="rgba(255,255,255,0.3)" stroke-width="0.8"/>' +
+            '</svg>';
+        }
+      ];
+
+      // Nuansa warna: hijau (#3DDC97, #2FA66B, #1F7A4D), kuning (#F5B82E), oranye (#E95420)
+      var colorGrads = [
+        ["#3DDC97", "#2FA66B"],
+        ["#2FA66B", "#1F7A4D"],
+        ["#3DDC97", "#1F7A4D"],
+        ["#1F7A4D", "#145333"],
+        ["#F5B82E", "#FED156"],
+        ["#F5B82E", "#E5A81E"],
+        ["#E95420", "#F5B82E"]
+      ];
+
+      var leafCount = 28 + Math.floor(Math.random() * 6); // 28 - 33 daun
+
+      for (var i = 0; i < leafCount; i++) {
+        var leafEl = document.createElement('div');
+        leafEl.className = 'intro-leaf';
+
+        var size = Math.floor(14 + Math.random() * 26); // 14px - 40px
+        var leftPct = Math.random() * 104 - 2; // -2vw to 102vw
+        var delay = (Math.random() * 0.95).toFixed(2); // stagger 0 - 0.95s
+        var duration = (1.85 + Math.random() * 0.7).toFixed(2); // 1.85s - 2.55s
+        var rotStart = Math.floor(Math.random() * 360);
+        var sway = Math.floor(22 + Math.random() * 24);
+        var wind = Math.floor(18 + Math.random() * 26);
+
+        // Kedalaman: daun kecil lebih pudar dan lambat
+        var norm = (size - 14) / 26;
+        var opacity = (0.55 + norm * 0.42).toFixed(2);
+
+        var shapeIdx = i % 3;
+        var colorIdx;
+        var randCol = Math.random();
+        if (randCol < 0.68) {
+          colorIdx = Math.floor(Math.random() * 4); // Hijau
+        } else if (randCol < 0.88) {
+          colorIdx = 4 + Math.floor(Math.random() * 2); // Kuning
+        } else {
+          colorIdx = 6; // Oranye
+        }
+
+        var pair = colorGrads[colorIdx];
+        var gradId = 'leafG_' + i + '_' + Date.now().toString(36);
+        var svgStr = leafShapes[shapeIdx](gradId, pair[0], pair[1]);
+
+        leafEl.style.width = size + 'px';
+        leafEl.style.height = size + 'px';
+        leafEl.style.left = leftPct + 'vw';
+        leafEl.style.animationDelay = delay + 's';
+        leafEl.style.animationDuration = duration + 's';
+        leafEl.style.setProperty('--leaf-op', opacity);
+
+        var innerEl = document.createElement('div');
+        innerEl.className = 'intro-leaf-inner';
+        innerEl.style.animationDuration = (1.1 + Math.random() * 0.8).toFixed(2) + 's';
+        innerEl.style.setProperty('--rz', rotStart + 'deg');
+        innerEl.style.setProperty('--sway', sway + 'px');
+        innerEl.style.setProperty('--wind', wind + 'px');
+        innerEl.innerHTML = svgStr;
+
+        leafEl.appendChild(innerEl);
+        overlay.appendChild(leafEl);
+      }
+
+      document.body.appendChild(overlay);
+
+      // Setelah sekitar 3.5 detik, hapus seluruh elemen dari DOM
+      setTimeout(function() {
+        if (overlay && overlay.parentNode) {
+          overlay.parentNode.removeChild(overlay);
+        }
+      }, 3550);
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', launchLeaves);
+    } else {
+      launchLeaves();
+    }
+  })();
+
+})();
+</script>
+</body>
+</html>
